@@ -1,0 +1,33 @@
+# IDE / editor metadata
+.idea/
+.vscode/
+*.iml
+
+# Build outputs
+**/target/
+**/build/
+**/bin/
+**/out/
+**/*.class
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Local environment / sensitive config
+.env
+.env.*
+**/.env
+**/.env.*
+**/*credentials*
+**/*secret*
+**/*key*
+**/*.pem
+**/*.jks
+
+# Hard-coded local backend config with DB credentials
+zonixrentalbackend/src/main/resources/application.properties
+
+# Maven wrapper jars if you do not want generated binaries committed
+**/.mvn/wrapper/maven-wrapper.jar

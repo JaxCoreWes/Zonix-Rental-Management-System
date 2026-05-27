@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.westoncodeops.sample.controllers.PaymentController"
+      spacing="20" styleClass="content-area">
+    
+    <!-- Header Section with Actions -->
+    <VBox spacing="15" styleClass="content-card">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <VBox HBox.hgrow="ALWAYS">
+                <Label text="Payment Records" styleClass="section-title"/>
+                <Label text="Track M-Pesa transactions and payment history" styleClass="section-subtitle"/>
+            </VBox>
+            <Button text="+ Record Payment" styleClass="button-primary" onAction="#showRecordPaymentDialog"/>
+        </HBox>
+        
+        <!-- Search and Filter Bar -->
+        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="toolbar">
+            <Label text="Search:" styleClass="form-label"/>
+            <TextField fx:id="searchField" promptText="Search by tenant, unit, or M-Pesa receipt" 
+                       prefWidth="360" onKeyReleased="#handleSearch" styleClass="search-input"/>
+            <Button text="Search" styleClass="toolbar-button" onAction="#handleSearch"/>
+            <Button text="Refresh" styleClass="toolbar-button" onAction="#loadPayments"/>
+            <Label text="Status:" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT" styleClass="form-label"/>
+            <Button text="All" styleClass="toolbar-button" onAction="#filterAll"/>
+            <Button text="Completed" styleClass="button-success" onAction="#filterCompleted"/>
+            <Button text="Pending" styleClass="button-warning" onAction="#filterPending"/>
+            <Button text="Failed" styleClass="button-danger" onAction="#filterFailed"/>
+        </HBox>
+    </VBox>
+    
+    <!-- Payments Table -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="content-card">
+        <Label text="All Payment Transactions" styleClass="section-title">
+            <padding>
+                <Insets bottom="15"/>
+            </padding>
+        </Label>
+        
+        <TableView fx:id="paymentsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60" visible="false"/>
+                <TableColumn fx:id="tenantNameColumn" text="Tenant" prefWidth="180"/>
+                <TableColumn fx:id="unitNumberColumn" text="Unit" prefWidth="100"/>
+                <TableColumn fx:id="amountColumn" text="Amount (KES)" prefWidth="120"/>
+                <TableColumn fx:id="paymentMethodColumn" text="Method" prefWidth="100"/>
+                <TableColumn fx:id="mpesaReceiptColumn" text="M-Pesa Receipt" prefWidth="150"/>
+                <TableColumn fx:id="phoneNumberColumn" text="Phone Number" prefWidth="130"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="paymentDateColumn" text="Payment Date" prefWidth="150"/>
+                <TableColumn fx:id="paymentForColumn" text="Payment For" prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <Label text="No payment records found. Click 'Record Payment' to add a new payment."/>
+            </placeholder>
+        </TableView>
+        
+        <!-- Table Footer with Stats -->
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="padding-small">
+            <padding>
+                <Insets top="15"/>
+            </padding>
+            <Label fx:id="totalPaymentsLabel" text="Total Payments: 0" styleClass="label-bold"/>
+            <Label fx:id="totalAmountLabel" text="Total Amount: KES 0.00" style="-fx-text-fill: #10B981;" styleClass="label-bold"/>
+            <Label fx:id="completedPaymentsLabel" text="Completed: 0" style="-fx-text-fill: #10B981;" styleClass="label-bold"/>
+            <Label fx:id="pendingPaymentsLabel" text="Pending: 0" style="-fx-text-fill: #F59E0B;" styleClass="label-bold"/>
+        </HBox>
+    </VBox>
+    
+</VBox>
+
+<!-- Made with Bob -->

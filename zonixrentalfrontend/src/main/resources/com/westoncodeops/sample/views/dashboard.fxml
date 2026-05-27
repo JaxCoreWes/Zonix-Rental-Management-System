@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="25" styleClass="content-area" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.westoncodeops.sample.controllers.DashboardController">
+    
+    <!-- Welcome Section -->
+    <VBox spacing="10">
+        <Label fx:id="welcomeLabel" style="-fx-font-size: 20; -fx-font-style: italic;" styleClass="section-title" text="Welcome, User" />
+        <Label styleClass="section-subtitle" text="Your comprehensive property management dashboard" />
+    </VBox>
+    
+    <!-- Statistics Grid -->
+    <GridPane fx:id="statsGrid" hgap="20" vgap="20">
+        <!-- Card 1 - Dynamic based on role -->
+        <VBox fx:id="card1" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 32px;" text="👥" />
+            <Label fx:id="totalTenantsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Total Tenants" />
+        </VBox>
+        
+        <!-- Card 2 - Dynamic based on role -->
+        <VBox fx:id="card2" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 32px;" text="🏢" />
+            <Label fx:id="totalUnitsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Total Units" />
+        </VBox>
+        
+        <!-- Card 3 - Dynamic based on role -->
+        <VBox fx:id="card3" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 32px;" text="✅" />
+            <Label fx:id="availableUnitsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Available Units" />
+        </VBox>
+        
+        <!-- Card 4 - Dynamic based on role -->
+        <VBox fx:id="card4" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 32px;" text="🔒" />
+            <Label fx:id="occupiedUnitsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Occupied Units" />
+        </VBox>
+        
+        <!-- Card 5 - Dynamic based on role -->
+        <VBox fx:id="card5" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 32px;" text="🔧" />
+            <Label fx:id="pendingTicketsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Pending Tickets" />
+        </VBox>
+        
+        <!-- Card 6 - Dynamic based on role -->
+        <VBox fx:id="card6" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 32px;" text="📅" />
+            <Label fx:id="pendingExtensionsLabel" styleClass="stat-value" text="0" />
+            <Label styleClass="stat-label" text="Pending Extensions" />
+        </VBox>
+        
+        <!-- Card 7 - Dynamic based on role -->
+        <VBox fx:id="card7" prefHeight="140" prefWidth="280" spacing="15" styleClass="dashboard-card" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 32px;" text="💳" />
+            <Label fx:id="totalPaymentsLabel" styleClass="stat-value" text="KES 0" />
+            <Label styleClass="stat-label" text="Total Payments (This Month)" />
+        </VBox>
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+    
+    <!-- Quick Actions Section -->
+    <VBox spacing="15" styleClass="content-card">
+        <Label styleClass="section-title" text="Quick Actions" />
+        <HBox spacing="15">
+            <Label styleClass="section-subtitle" text="Navigate to any module using the sidebar menu" />
+        </HBox>
+    </VBox>
+    
+</VBox>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="12" alignment="CENTER" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.westoncodeops.sample.controllers.LoginController" styleClass="login-container" stylesheets="@../style.css">
+    <children>
+        <Label style="-fx-font-size:18px; -fx-font-weight:700;" text="Zonix Rental - Sign In" />
+        <TextField fx:id="identifierField" promptText="Email or Phone number" prefWidth="320" />
+        <PasswordField fx:id="passwordField" promptText="Password" prefWidth="320" />
+        <Label fx:id="statusLabel" text="" />
+        <Button fx:id="loginBtn" text="Sign In" onAction="#handleLogin" prefWidth="320" />
+    </children>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+</VBox>

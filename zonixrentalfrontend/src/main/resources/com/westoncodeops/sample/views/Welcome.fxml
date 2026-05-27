@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="12" alignment="CENTER" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.westoncodeops.sample.controllers.WelcomeController" stylesheets="@../style.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    <children>
+        <Label style="-fx-font-size:20px; -fx-font-weight:700;" text="Welcome to Zonix Rental" />
+        <Button fx:id="signInBtn" text="Sign In to Account" onAction="#openSignIn" prefWidth="300" />
+        <Button fx:id="registerBtn" text="Register New Landlord Account" onAction="#openRegister" prefWidth="300" />
+    </children>
+</VBox>

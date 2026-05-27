@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.westoncodeops.sample.controllers.CaretakerManagementController" stylesheets="@../style.css">
+    <left>
+        <VBox spacing="8" style="-fx-padding:16;">
+            <Label text="Create Caretaker" style="-fx-font-weight:700; -fx-font-size:14;" />
+            <GridPane hgap="8" vgap="8">
+                <Label text="First Name" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="firstNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                <Label text="Last Name" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <TextField fx:id="lastNameField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                <Label text="Phone" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <TextField fx:id="phoneField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                <Label text="Password" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextField fx:id="passwordField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                <Button text="Create" fx:id="createBtn" onAction="#handleCreate" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                <Label fx:id="statusLabel" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            </GridPane>
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="8" style="-fx-padding:16;">
+            <Label text="Caretakers" style="-fx-font-weight:700; -fx-font-size:14;" />
+            <TableView fx:id="table" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colName" text="Full Name" prefWidth="250" />
+                    <TableColumn fx:id="colPhone" text="Phone" prefWidth="150" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

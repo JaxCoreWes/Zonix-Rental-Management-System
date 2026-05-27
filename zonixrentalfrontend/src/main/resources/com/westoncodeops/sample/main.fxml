@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!-- Made with Bob -->
+
+<BorderPane prefHeight="900.0" prefWidth="1400.0" styleClass="main-container" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.westoncodeops.sample.controllers.MainController">
+    
+    <!-- LEFT SIDEBAR NAVIGATION -->
+    <left>
+        <VBox spacing="0" styleClass="sidebar">
+         <AnchorPane prefHeight="175.0" prefWidth="259.0">
+            <children>
+               <ImageView fitHeight="186.0" fitWidth="288.0" layoutX="-22.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@Images/Pictures/ZonixRental%20Pic.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </AnchorPane>
+            
+            <!-- Navigation Buttons -->
+            <VBox spacing="8" style="-fx-padding: 30;" styleClass="sidebar-nav" VBox.vgrow="ALWAYS">
+                <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#showDashboard" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Dashboard">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/business.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="tenantsBtn" maxWidth="Infinity" onAction="#showTenants" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Tenants">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/user%20(1).png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="caretakersBtn" maxWidth="Infinity" onAction="#showCaretakers" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Caretakers">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/caretaker.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="unitsBtn" maxWidth="Infinity" onAction="#showUnits" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Units">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/plan.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="ticketsBtn" maxWidth="-Infinity" onAction="#showTickets" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Maintenance">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/tools.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="extensionsBtn" maxWidth="Infinity" onAction="#showExtensions" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Extensions">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/hourglass.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="paymentsBtn" maxWidth="Infinity" onAction="#showPayments" prefHeight="25.0" prefWidth="207.0" styleClass="nav-button" text="Payments">
+                    <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@Images/Icons/backlink.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+            
+            <Region VBox.vgrow="ALWAYS" />
+
+            <!-- Footer Section -->
+            <VBox alignment="CENTER_LEFT" spacing="4" styleClass="sidebar-footer">
+                <Label styleClass="sidebar-footer-text" text="Version 1.0.0" />
+                <Label styleClass="sidebar-footer-text" text="Built for enterprise" />
+            </VBox>
+        </VBox>
+    </left>
+    
+    <!-- CENTER CONTENT AREA -->
+    <center>
+        <VBox>
+            <!-- Top Header Bar -->
+            <HBox alignment="CENTER_LEFT" prefHeight="180.0" prefWidth="1109.0" spacing="12" styleClass="header-bar">
+                <VBox prefHeight="139.0" prefWidth="558.0" spacing="2">
+                    <Label fx:id="headerTitle" prefHeight="73.0" prefWidth="272.0" style="-fx-font-size: 25; -fx-font-weight: 700;" text="Dashboard">
+                  <font>
+                     <Font name="System Bold" size="36.0" />
+                  </font>
+                  <graphic>
+                     <ImageView fitHeight="90.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@Images/Icons/dashboard.png" />
+                        </image>
+                     </ImageView>
+                  </graphic></Label>
+                    <Label fx:id="headerSubtitle" prefHeight="23.0" prefWidth="243.0" style="-fx-font-family: Berlin Sans FB Demi; -fx-font-size: 13;" styleClass="header-subtitle" text="All your property's progress in one area">
+                  <font>
+                     <Font name="System Bold" size="12.0" />
+                  </font></Label>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER_RIGHT" prefHeight="139.0" prefWidth="315.0" spacing="10" styleClass="header-actions">
+                    <Label fx:id="userPillLabel" alignment="CENTER" prefHeight="40.0" prefWidth="141.0" style="-fx-text-alignment: center;" styleClass="user-pill" text="{Users Name}" />
+                    <Button prefHeight="40.0" prefWidth="94.0" styleClass="toolbar-button" text="Refresh" onAction="#refreshCurrentView" />
+                </HBox>
+            </HBox>
+            
+            <!-- Dynamic Content Area (Views will be loaded here) -->
+            <StackPane fx:id="contentArea" styleClass="content-area" VBox.vgrow="ALWAYS">
+                <!-- Views will be dynamically loaded into this StackPane -->
+            </StackPane>
+        </VBox>
+    </center>
+    
+</BorderPane>

@@ -49,7 +49,7 @@ public class ExtensionService implements IExtensionService{
 
     @Override
     @Transactional
-    public ExtensionResponse reviewExtension(UUID extensionId, ExtensionStatus newStatus, String caretakerPhone) {
+    public ExtensionResponse reviewExtension(UUID extensionId, ExtensionStatus newStatus, String reviewerPhone) {
         ExtensionRequest extension = extensionRepository.findById(extensionId)
                 .orElseThrow(() -> new RuntimeException("Extension request not found"));
 
@@ -57,10 +57,13 @@ public class ExtensionService implements IExtensionService{
             throw new IllegalStateException("This request has already been " + extension.getStatus());
         }
 
-        User caretaker = userService.getEntityByPhone(caretakerPhone);
+        User reviewer = null;
+        if (reviewerPhone != null && !reviewerPhone.isBlank()) {
+            reviewer = userService.getEntityByPhone(reviewerPhone);
+        }
 
         extension.setStatus(newStatus);
-        extension.setReviewedBy(caretaker);
+        extension.setReviewedBy(reviewer);
 
         return toResponse(extensionRepository.save(extension));
     }
@@ -72,7 +75,6 @@ public class ExtensionService implements IExtensionService{
     }
 
 
-
     private ExtensionResponse toResponse(ExtensionRequest ext) {
 
         String tenantName = ext.getTenant().fullName();
@@ -81,6 +83,8 @@ public class ExtensionService implements IExtensionService{
                 ext.getId(),
                 tenantName,
                 ext.getUnit().getUnitNumber(),
+                ext.getUnit().getRentAmount() != null ? ext.getUnit().getRentAmount().doubleValue() : null,
+                ext.getCreatedAt().toLocalDate(),
                 ext.getExpectedPaymentDate(),
                 ext.getReason(),
                 ext.getStatus(),

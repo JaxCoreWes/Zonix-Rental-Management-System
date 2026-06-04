@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * Maps to backend PaymentResponse DTO
  */
 public class Payment {
-    private Long id;
+    private String id;
     private Long tenantId;
     private String tenantName;
     private Long unitId;
@@ -30,7 +30,7 @@ public class Payment {
     }
 
     // Full constructor
-    public Payment(Long id, Long tenantId, String tenantName, Long unitId, 
+    public Payment(String id, Long tenantId, String tenantName, Long unitId, 
                    String unitNumber, Double amount, String paymentMethod,
                    String transactionReference, String mpesaReceiptNumber, 
                    String phoneNumber, String status, LocalDateTime paymentDate,
@@ -54,11 +54,11 @@ public class Payment {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -183,7 +183,7 @@ public class Payment {
     }
 
     public boolean isCompleted() {
-        return "COMPLETED".equalsIgnoreCase(status);
+        return "COMPLETED".equalsIgnoreCase(status) || "PAID".equalsIgnoreCase(status);
     }
 
     public boolean isPending() {

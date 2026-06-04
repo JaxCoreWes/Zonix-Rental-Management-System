@@ -30,12 +30,20 @@ public class RestClient {
             .build();
     
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, context) ->
-                    LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE))
+            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, context) -> {
+                String dateStr = json.getAsString();
+                // If it's a full ISO date time, extract date part
+                if (dateStr.contains("T")) {
+                    return LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                }
+                return LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            })
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (date, type, context) ->
                     new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
-            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, context) ->
-                    LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, context) -> {
+                String dateStr = json.getAsString();
+                return LocalDateTime.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            })
             .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (dateTime, type, context) ->
                     new JsonPrimitive(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
             .registerTypeAdapter(BigDecimal.class, (JsonDeserializer<BigDecimal>) (json, type, context) ->
@@ -132,6 +140,38 @@ public class RestClient {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + endpoint))
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonBody));
+        
+        HttpRequest request = addAuthHeaders(builder).build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        
+        if (response.statusCode() >= 200 && response.statusCode() < 300) {
+            if (responseType == Void.class || response.body().isEmpty()) {
+                return null;
+            }
+            if (responseType == String.class) {
+                return (T) response.body();
+            }
+            return gson.fromJson(response.body(), responseType);
+        } else {
+            throw new IOException("HTTP Error: " + response.statusCode() + " - " + response.body());
+        }
+    }
+
+    /**
+     * Perform a PATCH request
+     * @param endpoint The API endpoint (e.g., "/tickets/1/resolve")
+     * @param requestBody The request body object to serialize
+     * @param responseType The class type to deserialize the response into
+     * @return The deserialized response object
+     */
+    public static <T> T patch(String endpoint, Object requestBody, Class<T> responseType)
+            throws IOException, InterruptedException {
+        String jsonBody = requestBody != null ? gson.toJson(requestBody) : "";
+        
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + endpoint))
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody));
         
         HttpRequest request = addAuthHeaders(builder).build();
 

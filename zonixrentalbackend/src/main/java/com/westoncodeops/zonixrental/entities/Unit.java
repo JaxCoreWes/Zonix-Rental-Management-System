@@ -27,7 +27,7 @@ public class Unit {
     private BigDecimal rentAmount;
 
     @Column(nullable = false, unique = true)
-    private Integer Floor;
+    private Integer floor;
 
     @Column(nullable = false)
     private Boolean isOccupied = false;

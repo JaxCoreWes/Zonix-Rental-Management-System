@@ -9,8 +9,10 @@ import java.util.UUID;
 
 public record ExtensionResponse(UUID id,
                                 String tenantName,
-                                String uniName,
-                                LocalDate expectedPaymentDate,
+                                String unitNumber,
+                                Double amountDue,
+                                LocalDate requestedDate,
+                                LocalDate promisedPaymentDate,
                                 String reason,
                                 ExtensionStatus status,
                                 String reviewedBy,

@@ -90,14 +90,17 @@ public class MaintenanceService implements IMaintenanceService {
         return new MaintenanceTicketResponse(
                 ticket.getId(),
                 ticket.getTicketNumber(),
+                ticket.getTicketNumber(), // title
                 ticket.getCategory(),
                 ticket.getDescription(),
                 ticket.getStatus(),
                 ticket.getAiPriority(),
+                ticket.getAiPriority(), // priority
                 ticket.getReportedAt(),
                 ticket.getResolvedAt(),
-                ticket.getUnit().getUnitNumber(),
-                tenantName
+                tenantName,
+                tenantName, // reportedByName
+                ticket.getUnit().getUnitNumber()
         );
     }
 

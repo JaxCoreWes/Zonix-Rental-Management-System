@@ -1,205 +1,82 @@
 package com.westoncodeops.sample.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-/**
- * Client-side domain model representing a Maintenance Ticket entity
- * Maps to backend MaintenanceTicketResponse DTO
- */
 public class Ticket {
-    private Long id;
+    private String id;
+    private String ticketNumber;
     private String title;
     private String description;
     private String category;
     private String status;
+    private String aiPriority;
     private String priority;
     private Long unitId;
     private String unitNumber;
-    private Long reportedById;
+    private String tenantName;
     private String reportedByName;
-    private Long assignedToId;
-    private String assignedToName;
-    private LocalDate reportedDate;
-    private LocalDate resolvedDate;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime reportedAt;
+    private LocalDateTime resolvedAt;
 
-    // Default constructor
-    public Ticket() {
-    }
+    public Ticket() {}
 
-    // Full constructor
-    public Ticket(Long id, String title, String description, String category, 
-                  String status, String priority, Long unitId, String unitNumber,
-                  Long reportedById, String reportedByName, Long assignedToId, 
-                  String assignedToName, LocalDate reportedDate, LocalDate resolvedDate,
-                  LocalDate createdAt, LocalDate updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.status = status;
-        this.priority = priority;
-        this.unitId = unitId;
-        this.unitNumber = unitNumber;
-        this.reportedById = reportedById;
-        this.reportedByName = reportedByName;
-        this.assignedToId = assignedToId;
-        this.assignedToName = assignedToName;
-        this.reportedDate = reportedDate;
-        this.resolvedDate = resolvedDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public String getTicketNumber() { return ticketNumber; }
+    public void setTicketNumber(String ticketNumber) { this.ticketNumber = ticketNumber; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitle() { return title != null ? title : ticketNumber; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getAiPriority() { return aiPriority; }
+    public void setAiPriority(String aiPriority) { this.aiPriority = aiPriority; }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getPriority() { return priority != null ? priority : aiPriority; }
+    public void setPriority(String priority) { this.priority = priority; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public Long getUnitId() { return unitId; }
+    public void setUnitId(Long unitId) { this.unitId = unitId; }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getUnitNumber() { return unitNumber; }
+    public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getTenantName() { return tenantName; }
+    public void setTenantName(String tenantName) { this.tenantName = tenantName; }
 
-    public String getPriority() {
-        return priority;
-    }
+    public String getReportedByName() { return reportedByName != null ? reportedByName : tenantName; }
+    public void setReportedByName(String reportedByName) { this.reportedByName = reportedByName; }
 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
+    public LocalDateTime getReportedAt() { return reportedAt; }
+    public void setReportedAt(LocalDateTime reportedAt) { this.reportedAt = reportedAt; }
 
-    public Long getUnitId() {
-        return unitId;
-    }
+    public LocalDateTime getResolvedAt() { return resolvedAt; }
+    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
 
-    public void setUnitId(Long unitId) {
-        this.unitId = unitId;
-    }
+    public LocalDate getReportedDate() { return reportedAt != null ? reportedAt.toLocalDate() : null; }
 
-    public String getUnitNumber() {
-        return unitNumber;
-    }
-
-    public void setUnitNumber(String unitNumber) {
-        this.unitNumber = unitNumber;
-    }
-
-    public Long getReportedById() {
-        return reportedById;
-    }
-
-    public void setReportedById(Long reportedById) {
-        this.reportedById = reportedById;
-    }
-
-    public String getReportedByName() {
-        return reportedByName;
-    }
-
-    public void setReportedByName(String reportedByName) {
-        this.reportedByName = reportedByName;
-    }
-
-    public Long getAssignedToId() {
-        return assignedToId;
-    }
-
-    public void setAssignedToId(Long assignedToId) {
-        this.assignedToId = assignedToId;
-    }
-
-    public String getAssignedToName() {
-        return assignedToName;
-    }
-
-    public void setAssignedToName(String assignedToName) {
-        this.assignedToName = assignedToName;
-    }
-
-    public LocalDate getReportedDate() {
-        return reportedDate;
-    }
-
-    public void setReportedDate(LocalDate reportedDate) {
-        this.reportedDate = reportedDate;
-    }
-
-    public LocalDate getResolvedDate() {
-        return resolvedDate;
-    }
-
-    public void setResolvedDate(LocalDate resolvedDate) {
-        this.resolvedDate = resolvedDate;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDate getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDate updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public boolean isResolved() {
-        return "RESOLVED".equalsIgnoreCase(status);
-    }
-
-    public boolean isPending() {
-        return "PENDING".equalsIgnoreCase(status);
-    }
+    public boolean isResolved() { return "RESOLVED".equalsIgnoreCase(status); }
+    public boolean isPending() { return "PENDING".equalsIgnoreCase(status); }
 
     @Override
     public String toString() {
         return "Ticket{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + getTitle() + '\'' +
                 ", category='" + category + '\'' +
                 ", status='" + status + '\'' +
-                ", priority='" + priority + '\'' +
+                ", priority='" + getPriority() + '\'' +
                 ", unitNumber='" + unitNumber + '\'' +
                 '}';
     }
 }
-
-// Made with Bob

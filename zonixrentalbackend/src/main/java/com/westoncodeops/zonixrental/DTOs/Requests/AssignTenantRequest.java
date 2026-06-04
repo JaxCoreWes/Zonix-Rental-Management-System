@@ -1,4 +1,4 @@
 package com.westoncodeops.zonixrental.DTOs.Requests;
 
-public record AssignTenantRequest() {
+public record AssignTenantRequest(String tenantPhoneNumber) {
 }

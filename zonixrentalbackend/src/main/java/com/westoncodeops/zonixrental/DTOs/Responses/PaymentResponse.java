@@ -9,12 +9,15 @@ import java.util.UUID;
 
 public record PaymentResponse(UUID id,
                               BigDecimal amount,
-                              String mpesaRef,
+                              String mpesaReceiptNumber,
                               PaymentStatus status,
                               LocalDateTime paymentDate,
                               LocalDate coversFrom,
                               LocalDate coversUntil,
                               String tenantName,
-                              String unitNumber
+                              String unitNumber,
+                              String phoneNumber,
+                              String paymentMethod,
+                              String paymentFor
                               ) {
 }

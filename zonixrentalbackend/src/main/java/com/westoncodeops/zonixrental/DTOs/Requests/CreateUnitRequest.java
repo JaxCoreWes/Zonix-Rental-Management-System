@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record CreateUnitRequest(@NotBlank String unitNumber,
-                                @NotNull BigDecimal rentAmount,
-                                @NotNull Integer Floor) {
+                               @NotNull BigDecimal rentAmount,
+                               @NotNull Integer floor) {
 }

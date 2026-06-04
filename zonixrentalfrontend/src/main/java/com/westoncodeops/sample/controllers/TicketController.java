@@ -7,21 +7,24 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Controller for managing maintenance tickets view
- */
 public class TicketController {
 
     @FXML
     private TableView<Ticket> ticketsTable;
     @FXML
-    private TableColumn<Ticket, Long> idColumn;
+    private TableColumn<Ticket, String> idColumn;
     @FXML
     private TableColumn<Ticket, String> titleColumn;
     @FXML
@@ -53,9 +56,6 @@ public class TicketController {
     private ObservableList<Ticket> ticketsList = FXCollections.observableArrayList();
     private ObservableList<Ticket> filteredList = FXCollections.observableArrayList();
 
-    /**
-     * Initialize the controller
-     */
     @FXML
     public void initialize() {
         setupTableColumns();
@@ -63,9 +63,6 @@ public class TicketController {
         loadTickets();
     }
 
-    /**
-     * Setup table columns with property bindings
-     */
     private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -77,7 +74,6 @@ public class TicketController {
         assignedToColumn.setCellValueFactory(new PropertyValueFactory<>("assignedToName"));
         reportedDateColumn.setCellValueFactory(new PropertyValueFactory<>("reportedDate"));
 
-        // Custom cell factory for status column
         statusColumn.setCellFactory(column -> new TableCell<Ticket, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -90,7 +86,7 @@ public class TicketController {
                     if ("RESOLVED".equalsIgnoreCase(status)) {
                         setStyle("-fx-background-color: #D1FAE5; -fx-text-fill: #065F46; -fx-alignment: center;");
                     } else if ("PENDING".equalsIgnoreCase(status)) {
-                        setStyle("-fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-alignment: center;");
+                        setStyle("-fx-background-color: #FEE2E2; -fx-text-fill: #991B1B; -fx-alignment: center;");
                     } else if ("IN_PROGRESS".equalsIgnoreCase(status)) {
                         setStyle("-fx-background-color: #DBEAFE; -fx-text-fill: #1E40AF; -fx-alignment: center;");
                     }
@@ -98,7 +94,6 @@ public class TicketController {
             }
         });
 
-        // Custom cell factory for priority column
         priorityColumn.setCellFactory(column -> new TableCell<Ticket, String>() {
             @Override
             protected void updateItem(String priority, boolean empty) {
@@ -122,9 +117,6 @@ public class TicketController {
         ticketsTable.setItems(filteredList);
     }
 
-    /**
-     * Setup actions column with buttons
-     */
     private void setupActionsColumn() {
         actionsColumn.setCellFactory(column -> new TableCell<Ticket, Void>() {
             private final Button resolveButton = new Button("Resolve");
@@ -151,16 +143,11 @@ public class TicketController {
         });
     }
 
-    /**
-     * Load tickets from backend API
-     * Endpoint: GET /api/v1/maintenance
-     */
     @FXML
     public void loadTickets() {
         new Thread(() -> {
             try {
-                // Fetch maintenance tickets from API
-                String response = RestClient.get("/maintenance", String.class);
+                String response = RestClient.get("/tickets/allTickets", String.class);
                 List<Ticket> tickets = RestClient.getGson().fromJson(response,
                     new TypeToken<List<Ticket>>(){}.getType());
 
@@ -181,9 +168,6 @@ public class TicketController {
         }).start();
     }
 
-    /**
-     * Handle search functionality
-     */
     @FXML
     public void handleSearch() {
         String searchText = searchField.getText().toLowerCase().trim();
@@ -203,18 +187,12 @@ public class TicketController {
         updateStats();
     }
 
-    /**
-     * Filter to show all tickets
-     */
     @FXML
     public void filterAll() {
         filteredList.setAll(ticketsList);
         updateStats();
     }
 
-    /**
-     * Filter to show only pending tickets
-     */
     @FXML
     public void filterPending() {
         filteredList.clear();
@@ -226,9 +204,6 @@ public class TicketController {
         updateStats();
     }
 
-    /**
-     * Filter to show only resolved tickets
-     */
     @FXML
     public void filterResolved() {
         filteredList.clear();
@@ -240,9 +215,6 @@ public class TicketController {
         updateStats();
     }
 
-    /**
-     * Update statistics labels
-     */
     private void updateStats() {
         int total = filteredList.size();
         int pending = (int) filteredList.stream().filter(Ticket::isPending).count();
@@ -253,26 +225,21 @@ public class TicketController {
         resolvedTicketsLabel.setText("Resolved: " + resolved);
     }
 
-    /**
-     * Handle resolve ticket action
-     * Calls PUT /api/v1/maintenance/{id}/resolve endpoint
-     */
     private void handleResolveTicket(Ticket ticket) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Resolve Ticket");
-        alert.setHeaderText("Resolve Ticket #" + ticket.getId());
+        alert.setHeaderText("Resolve Ticket " + ticket.getTicketNumber());
         alert.setContentText("Are you sure you want to mark this ticket as resolved?");
         
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 new Thread(() -> {
                     try {
-                        // Call PUT endpoint to resolve ticket
-                        RestClient.put("/maintenance/" + ticket.getId() + "/resolve", null, String.class);
+                        RestClient.patch("/tickets/" + ticket.getId() + "/resolve", null, String.class);
                         
                         Platform.runLater(() -> {
-                            showInfo("Ticket #" + ticket.getId() + " marked as resolved.");
-                            loadTickets(); // Refresh the list
+                            showInfo("Ticket " + ticket.getTicketNumber() + " marked as resolved.");
+                            loadTickets();
                         });
                         
                     } catch (Exception e) {
@@ -286,21 +253,32 @@ public class TicketController {
         });
     }
 
-    /**
-     * Show create ticket dialog
-     */
     @FXML
     public void showCreateTicketDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Create Ticket");
-        alert.setHeaderText("Create New Maintenance Ticket");
-        alert.setContentText("This feature will open a dialog to create a new maintenance ticket.");
-        alert.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/westoncodeops/sample/views/add_ticket_modal.fxml"));
+            Parent root = loader.load();
+
+            AddTicketModalController modalController = loader.getController();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Create Maintenance Ticket");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+
+            modalController.setModalStage(stage);
+            modalController.setParentController(this);
+
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            showError("Failed to open Add Ticket modal: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * Show error alert
-     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -309,16 +287,11 @@ public class TicketController {
         alert.showAndWait();
     }
 
-    /**
-     * Show info alert
-     */
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
+        alert.setTitle("Success");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 }
-
-// Made with Bob

@@ -35,8 +35,26 @@ public class CaretakerManagementController {
 
     @FXML
     public void initialize() {
-        colName.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().get("fullName").getAsString()));
-        colPhone.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().get("phoneNumber").getAsString()));
+        colName.setCellValueFactory(cell -> {
+            var obj = cell.getValue();
+            String name = "";
+            if (obj.has("fullname") && !obj.get("fullname").isJsonNull()) {
+                name = obj.get("fullname").getAsString();
+            } else if (obj.has("fullName") && !obj.get("fullName").isJsonNull()) {
+                name = obj.get("fullName").getAsString();
+            }
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+
+        colPhone.setCellValueFactory(cell -> {
+            var obj = cell.getValue();
+            String phone = "";
+            if (obj.has("phoneNumber") && !obj.get("phoneNumber").isJsonNull()) {
+                phone = obj.get("phoneNumber").getAsString();
+            }
+            return new javafx.beans.property.SimpleStringProperty(phone);
+        });
+
         table.setItems(items);
         loadCaretakers();
     }

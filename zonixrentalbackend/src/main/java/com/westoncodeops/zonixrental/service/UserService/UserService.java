@@ -5,6 +5,7 @@ import com.westoncodeops.zonixrental.DTOs.Requests.UserRequest;
 import com.westoncodeops.zonixrental.DTOs.Responses.UserResponse;
 import com.westoncodeops.zonixrental.entities.User;
 import com.westoncodeops.zonixrental.enums.Role;
+import com.westoncodeops.zonixrental.integration.sms.SmsService;
 import com.westoncodeops.zonixrental.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class UserService implements IUserService{
 
     private final UserRepository  userRepository;
+    private final SmsService smsService;
 
 
     @Override
@@ -47,6 +49,12 @@ public class UserService implements IUserService{
                 .build();
 
         User savedUser = userRepository.save(user);
+
+        // Send welcome SMS if user is a tenant
+        if (request.role() == Role.TENANT) {
+            String chatbotUrl = "http://localhost:8080/tenant-portal";
+            smsService.sendWelcomeSms(savedUser.getPhoneNumber(), savedUser.fullName(), chatbotUrl);
+        }
 
         return toResponse(savedUser);
     }

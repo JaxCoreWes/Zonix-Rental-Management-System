@@ -110,6 +110,16 @@ public class Unit {
     public boolean isOccupied() {
         return Boolean.TRUE.equals(isOccupied);
     }
+    
+    // Dummy method for compilation
+    public String getUnitType() {
+        return "Standard";
+    }
+    
+    // Dummy method for compilation
+    public void setUnitType(String unitType) {
+        // Do nothing
+    }
 
     @Override
     public String toString() {

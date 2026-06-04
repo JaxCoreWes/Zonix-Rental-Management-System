@@ -7,7 +7,7 @@ import java.time.LocalDate;
  * Maps to backend ExtensionResponse DTO
  */
 public class Extension {
-    private Long id;
+    private String id;
     private Long tenantId;
     private String tenantName;
     private Long unitId;
@@ -29,7 +29,7 @@ public class Extension {
     }
 
     // Full constructor
-    public Extension(Long id, Long tenantId, String tenantName, Long unitId, 
+    public Extension(String id, Long tenantId, String tenantName, Long unitId, 
                      String unitNumber, LocalDate requestedDate, LocalDate promisedPaymentDate,
                      Double amountDue, String reason, String status, Long approvedById,
                      String approvedByName, LocalDate approvedDate, String rejectionReason,
@@ -53,11 +53,11 @@ public class Extension {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -7,11 +7,19 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for managing units view and tenant-to-unit assignments
@@ -116,11 +124,11 @@ public class UnitController {
                 } else {
                     Unit unit = getTableView().getItems().get(getIndex());
                     if (unit.isAvailable()) {
-                        toggleButton.setText("Mark Occupied");
+                        toggleButton.setText("Assign Tenant");
                         toggleButton.getStyleClass().removeAll("button-success", "button-secondary");
                         toggleButton.getStyleClass().add("button-secondary");
                     } else {
-                        toggleButton.setText("Mark Available");
+                        toggleButton.setText("Unassign Tenant");
                         toggleButton.getStyleClass().removeAll("button-success", "button-secondary");
                         toggleButton.getStyleClass().add("button-success");
                     }
@@ -236,38 +244,68 @@ public class UnitController {
      * Calls PUT /api/v1/units/{id}/status endpoint
      */
     private void handleToggleUnitStatus(Unit unit) {
-        String newStatus = unit.isAvailable() ? "OCCUPIED" : "AVAILABLE";
-        
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Change Unit Status");
-        confirmAlert.setHeaderText("Change status for Unit " + unit.getUnitNumber());
-        confirmAlert.setContentText("Change status from " + unit.getStatus() + " to " + newStatus + "?");
-        
-        confirmAlert.showAndWait().ifPresent(response -> {
-            if (response == javafx.scene.control.ButtonType.OK) {
-                new Thread(() -> {
-                    try {
-                        // Create request body with new status
-                        java.util.Map<String, String> requestBody = new java.util.HashMap<>();
-                        requestBody.put("status", newStatus);
-                        
-                        // Call PUT endpoint
-                        RestClient.put("/units/" + unit.getId() + "/status", requestBody, String.class);
-                        
-                        javafx.application.Platform.runLater(() -> {
-                            showInfo("Unit " + unit.getUnitNumber() + " status updated to " + newStatus);
-                            loadUnits(); // Refresh the list
-                        });
-                        
-                    } catch (Exception e) {
-                        javafx.application.Platform.runLater(() -> {
-                            showError("Failed to update unit status: " + e.getMessage());
-                            e.printStackTrace();
-                        });
-                    }
-                }).start();
+        if (unit.isAvailable()) {
+            String tenantPhone = promptForTenantPhone(unit);
+            if (tenantPhone == null || tenantPhone.isBlank()) {
+                return;
             }
-        });
+
+            new Thread(() -> {
+                try {
+                    Map<String, String> requestBody = new HashMap<>();
+                    requestBody.put("tenantPhoneNumber", tenantPhone);
+
+                    RestClient.put("/units/" + unit.getId() + "/assign-tenant", requestBody, String.class);
+
+                    Platform.runLater(() -> {
+                        showInfo("Tenant assigned to unit " + unit.getUnitNumber());
+                        loadUnits();
+                    });
+                } catch (Exception e) {
+                    Platform.runLater(() -> {
+                        showError("Failed to assign tenant: " + e.getMessage());
+                        e.printStackTrace();
+                    });
+                }
+            }).start();
+        } else {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Unassign Tenant");
+            confirmAlert.setHeaderText("Remove tenant from Unit " + unit.getUnitNumber());
+            confirmAlert.setContentText("This will mark the unit available again and remove the assigned tenant.");
+
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    new Thread(() -> {
+                        try {
+                            Map<String, String> requestBody = new HashMap<>();
+                            requestBody.put("status", "AVAILABLE");
+
+                            RestClient.put("/units/" + unit.getId() + "/status", requestBody, String.class);
+
+                            Platform.runLater(() -> {
+                                showInfo("Unit " + unit.getUnitNumber() + " is now available");
+                                loadUnits();
+                            });
+                        } catch (Exception e) {
+                            Platform.runLater(() -> {
+                                showError("Failed to unassign tenant: " + e.getMessage());
+                                e.printStackTrace();
+                            });
+                        }
+                    }).start();
+                }
+            });
+        }
+    }
+
+    private String promptForTenantPhone(Unit unit) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Assign Tenant");
+        dialog.setHeaderText("Assign a registered tenant to unit " + unit.getUnitNumber());
+        dialog.setContentText("Enter tenant phone number:");
+
+        return dialog.showAndWait().orElse(null);
     }
 
     /**
@@ -275,11 +313,28 @@ public class UnitController {
      */
     @FXML
     public void showAddUnitDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Unit");
-        alert.setHeaderText("Add New Unit");
-        alert.setContentText("This feature will open a dialog to create a new unit.");
-        alert.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/westoncodeops/sample/views/add_unit_modal.fxml"));
+            Parent root = loader.load();
+
+            AddUnitModalController modalController = loader.getController();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add New Unit");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+
+            modalController.setModalStage(stage);
+            modalController.setParentController(this);
+
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            showError("Failed to open Add Unit modal: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -304,5 +359,3 @@ public class UnitController {
         alert.showAndWait();
     }
 }
-
-// Made with Bob

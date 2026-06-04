@@ -96,7 +96,10 @@ return toResponse(savedPayment);
                 payment.getCoversFrom(),
                 payment.getCoversUntil(),
                 tenantName,
-                payment.getUnit().getUnitNumber()
+                payment.getUnit().getUnitNumber(),
+                payment.getPayer(),
+                "MPESA",
+                "RENT"
         );
     }
 }

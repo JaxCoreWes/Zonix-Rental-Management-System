@@ -39,9 +39,9 @@ public class ExtensionController {
             @PathVariable UUID id,
             @RequestBody Map<String, String> actionRequest){
         String action = actionRequest.getOrDefault("action", "").toUpperCase();
-        String caretakerPhone = actionRequest.getOrDefault("caretakerPhone", "");
+        String reviewerPhone = actionRequest.getOrDefault("caretakerPhone", actionRequest.getOrDefault("reviewerPhone", ""));
         ExtensionStatus status = "APPROVE".equals(action) ? ExtensionStatus.APPROVED : ExtensionStatus.REJECTED;
-        return ResponseEntity.ok(extensionService.reviewExtension(id, status, caretakerPhone));
+        return ResponseEntity.ok(extensionService.reviewExtension(id, status, reviewerPhone));
     }
 
 

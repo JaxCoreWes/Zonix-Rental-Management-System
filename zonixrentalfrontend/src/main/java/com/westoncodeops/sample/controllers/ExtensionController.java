@@ -291,6 +291,7 @@ public class ExtensionController {
                         // Prepare request body
                         Map<String, String> requestBody = new HashMap<>();
                         requestBody.put("action", "APPROVE");
+                        requestBody.put("caretakerPhone", session.getPhoneNumber());
                         
                         // Call POST endpoint to approve extension
                         RestClient.post("/extensions/" + extension.getId() + "/action",
@@ -336,6 +337,7 @@ public class ExtensionController {
                         Map<String, String> requestBody = new HashMap<>();
                         requestBody.put("action", "REJECT");
                         requestBody.put("reason", reason.trim());
+                        requestBody.put("caretakerPhone", session.getPhoneNumber());
                         
                         // Call POST endpoint to reject extension
                         RestClient.post("/extensions/" + extension.getId() + "/action",
